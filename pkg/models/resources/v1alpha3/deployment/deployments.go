@@ -26,7 +26,7 @@ import (
 	"kubesphere.io/kubesphere/pkg/api"
 	"kubesphere.io/kubesphere/pkg/apiserver/query"
 	"kubesphere.io/kubesphere/pkg/models/resources/v1alpha3"
-
+	"log"
 	v1 "k8s.io/api/apps/v1"
 )
 
@@ -49,6 +49,7 @@ func (d *deploymentsGetter) Get(namespace, name string) (runtime.Object, error) 
 }
 
 func (d *deploymentsGetter) List(namespace string, query *query.Query) (*api.ListResult, error) {
+	log.Println("--------13---1----")
 	// first retrieves all deployments within given namespace
 	deployments, err := d.sharedInformers.Apps().V1().Deployments().Lister().Deployments(namespace).List(query.Selector())
 	if err != nil {
@@ -57,6 +58,7 @@ func (d *deploymentsGetter) List(namespace string, query *query.Query) (*api.Lis
 
 	var result []runtime.Object
 	for _, deployment := range deployments {
+		deployment.Name = strings.ToUpper(deployment.Name)
 		result = append(result, deployment)
 	}
 
